@@ -27,9 +27,12 @@ class Phrase {
 			}
 		}
 	}
+	
 	showMatchedLetter(letter) {
 		$(`.${letter}`).addClass("show").removeClass("hide");
 	}
+
+		// handles the interactions from the visual user keyboard clicks 
 	handleInteraction() {
 		document.getElementById("qwerty").addEventListener("click", (event) => {
 			if (event.target.tagName === 'BUTTON') {
@@ -52,6 +55,8 @@ class Phrase {
 			}
 		});
 	}
+
+	// handles the interactions from the physical user keyboard clicks 
 	handleInteraction1() {
 		document.onkeydown = function(event) {
 			function getElementFromLetter(letter) {
