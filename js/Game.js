@@ -31,8 +31,8 @@ class Game {
 		this.activePhrase = this.getRandomPhrase();
 		let phrase = new Phrase(this.activePhrase);
 		phrase.addPhraseToDisplay();
-		phrase.handleInteraction();
-		phrase.handleInteraction1();
+		this.handleInteraction();
+		this.handleInteractionKeys();
 	}
 	/**
 * Checks for winning move
@@ -93,4 +93,66 @@ won
 			})
 		}
 	}
+
+
+
+		// handles the interactions from the visual user keyboard clicks 
+		handleInteraction() {
+			document.getElementById("qwerty").addEventListener("click", (event) => {
+				if (event.target.tagName === 'BUTTON') {
+					// get the clicked letter
+					let phrase = new Phrase(game.activePhrase)
+					const letter = event.target.textContent;
+					const targetLetter = event.target;
+					if (phrase.checkLetter(letter)) {
+						phrase.showMatchedLetter(letter);
+						targetLetter.classList.add("chosen");
+						targetLetter.setAttribute("disabled","");
+						this.checkForWin();
+						this.gameOver();
+					} else {
+						targetLetter.classList.add("wrong");
+						
+						
+						this.removeLife();
+						targetLetter.setAttribute("disabled","");
+					}
+				}
+			});
+		}
+	
+		// handles the interactions from the physical user keyboard clicks 
+		handleInteractionKeys() {
+			document.onkeydown = function(event) {
+				function getElementFromLetter(letter) {
+					let buttons = document.querySelectorAll(".keyrow button");
+					for (let i = 0; i < buttons.length; i++) {
+						if (buttons[i].textContent == letter) return buttons[i];
+					}
+				}
+				let phrase = new Phrase(game.activePhrase)
+				// get the clicked letter from the keyboard
+				let LetterCode = parseInt(event.keyCode);
+				if (LetterCode > 64 && LetterCode < 91) {
+					let letter = keyCodes[LetterCode];
+					let targetLetter = getElementFromLetter(letter);
+					if (phrase.checkLetter(letter)) {
+						phrase.showMatchedLetter(letter);
+						targetLetter.classList.add("chosen");
+						targetLetter.setAttribute("disabled","");
+						game.checkForWin();
+						game.gameOver();
+					} else {
+						if(targetLetter.disabled==false)
+						{
+						targetLetter.classList.add("wrong");
+						game.removeLife();
+						
+						targetLetter.setAttribute("disabled","");
+					}
+						
+					}
+				}
+			}
+		}
 }
